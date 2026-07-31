@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Girlfriend's Day! 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            display: block;
+            margin: 20px auto;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            border: 5px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .ui-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            z-index: 10;
+        }
+
+        .checkpoint-counter {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+        }
+
+        .save-indicator {
+            background: rgba(76, 175, 80, 0.8);
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+            animation: slideDown 0.5s;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .memory-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            animation: fadeIn 0.5s;
+        }
+
+        .memory-content {
+            text-align: center;
+            animation: scaleIn 0.5s;
+        }
+
+        .memory-content img {
+            max-width: 80%;
+            max-height: 70vh;
+            border-radius: 15px;
+            border: 5px solid #fff;
+            box-shadow: 0 0 30px rgba(255,255,255,0.5);
+        }
+
+        .memory-content h2 {
+            color: #ff69b4;
+            margin: 20px 0;
+            font-size: 28px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .continue-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+
+        .continue-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .final-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            animation: fadeIn 1s;
+        }
+
+        .final-content {
+            text-align: center;
+            color: white;
+            animation: scaleIn 1s;
+            position: relative;
+            z-index: 201;
+        }
+
+        .pop-text {
+            font-size: 70px;
+            color: white;
+            text-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493, 0 0 90px #ff006e, 0 0 120px #ffb3e6;
+            animation: popIn 1s ease-out, floatText 4s ease-in-out infinite;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        .pop-sub {
+            color: #fff;
+            font-size: 36px;
+            text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493;
+            animation: fadeUp 1.5s ease-out 0.5s both;
+            margin: 15px 0;
+        }
+
+        .final-content img {
+            max-width: 90%;
+            max-height: 50vh;
+            border-radius: 20px;
+            border: 8px solid white;
+            box-shadow: 0 0 50px rgba(255,255,255,0.8), 0 0 80px rgba(255,105,180,0.6);
+            margin: 20px 0;
+            animation: scaleInImage 1.5s ease-out 1s both;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.3) rotate(5deg); opacity: 1; }
+            70% { transform: scale(0.9) rotate(-2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes floatText {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-25px) scale(1.08); }
+        }
+
+        @keyframes fadeUp {
+            from { transform: translateY(60px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes scaleInImage {
+            from { transform: scale(0.3) rotate(-5deg); opacity: 0; }
+            to { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.5); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 300;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            animation: float 3s ease-in infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 250;
+            display: none;
+        }
+
+        .game-over-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 32px;
+            background: rgba(255,0,0,0.9);
+            padding: 30px 50px;
+            border-radius: 15px;
+            display: none;
+            z-index: 50;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .checkpoint-info {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #ffeb3b;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-container">
+        <div class="checkpoint-counter">
+            Checkpoints: <span id="checkpointCount">0</span> / 5 💕
+        </div>
+        <div class="save-indicator" id="saveIndicator">
+            ✓ Progress Saved!
+        </div>
+    </div>
+
+    <div class="instructions">
+        Arrow Keys ← → to move | ↑ to jump | Avoid obstacles ⚠️ | Collect hearts ❤️
+    </div>
+
+    <div class="game-over-text" id="gameOver">
+        💔 Oops! Hit an Obstacle 💔
+        <div class="checkpoint-info" id="checkpointInfo">
+            Restarting from last checkpoint...
+        </div>
+        <button class="restart-btn" onclick="restartGame()">Continue from Checkpoint 💖</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+    <canvas id="fireworksCanvas" class="fireworks-canvas"></canvas>
+
+    <div class="memory-popup" id="memoryPopup">
+        <div class="memory-content">
+            <h2 id="memoryTitle">Memory Unlocked! 💕</h2>
+            <img id="memoryImage" src="" alt="Memory">
+            <br>
+            <button class="continue-btn" onclick="closeMemory()">Continue Journey 💖</button>
+        </div>
+    </div>
+
+    <div class="final-message" id="finalMessage">
+        <div class="final-content">
+            <h1 class="pop-text">Happy Girlfriend's Day!</h1>
+            <h2 class="pop-sub">You Mean The World To Me ❤️</h2>
+            <img id="finalImage" src="" alt="Us Together">
+            <h2 class="pop-sub" style="font-size: 28px;">I Love You Forever 💕</h2>
+        </div>
+    </div>
+
+    <div class="hearts" id="heartsContainer"></div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const fireworksCanvas = document.getElementById('fireworksCanvas');
+        const fwCtx = fireworksCanvas.getContext('2d');
+        
+        canvas.width = 800;
+        canvas.height = 600;
+        fireworksCanvas.width = window.innerWidth;
+        fireworksCanvas.height = window.innerHeight;
+
+        let player = {
+            x: 50,
+            y: 500,
+            width: 40,
+            height: 40,
+            speed: 5,
+            velocityY: 0,
+            jumping: false,
+            image: new Image(),
+            imageLoaded: false
+        };
+
+        let savePoints = [
+            { x: 50, y: 500 },
+            { x: 200, y: 370 },
+            { x: 400, y: 220 },
+            { x: 600, y: 420 },
+            { x: 350, y: 70 },
+            { x: 700, y: 120 }
+        ];
+
+        let currentSavePoint = 0;
+
+        // REPLACE WITH YOUR PHOTO URL
+        player.image.src = 'YOUR_IMAGE_URL_HERE';
+        player.image.onload = () => {
+            player.imageLoaded = true;
+        };
+
+        // REPLACE WITH 5 MEMORY PHOTOS
+        const memoryImages = [
+            'MEMORY_1_URL',
+            'MEMORY_2_URL',
+            'MEMORY_3_URL',
+            'MEMORY_4_URL',
+            'MEMORY_5_URL'
+        ];
+
+        // REPLACE WITH YOUR FINAL PHOTO TOGETHER
+        const finalKissImage = 'FINAL_KISS_IMAGE_URL';
+
+        let checkpoints = [
+            { x: 200, y: 370, width: 30, height: 30, collected: false, memory: 0 },
+            { x: 400, y: 220, width: 30, height: 30, collected: false, memory: 1 },
+            { x: 600, y: 420, width: 30, height: 30, collected: false, memory: 2 },
+            { x: 350, y: 70, width: 30, height: 30, collected: false, memory: 3 },
+            { x: 700, y: 120, width: 30, height: 30, collected: false, memory: 4 }
+        ];
+
+        let obstacles = [
+            { x: 300, y: 430, width: 40, height: 40, type: 'spike', moving: false },
+            { x: 500, y: 280, width: 40, height: 40, type: 'spike', moving: false },
+            { x: 150, y: 330, width: 40, height: 40, type: 'moving', moving: true, startX: 150, endX: 300, speed: 2, direction: 1 },
+            { x: 450, y: 130, width: 40, height: 40, type: 'moving', moving: true, startX: 450, endX: 600, speed: 3, direction: 1 },
+            { x: 650, y: 480, width: 40, height: 40, type: 'spike', moving: false }
+        ];
+
+        let keys = {};
+        let checkpointCount = 0;
+        let gameActive = true;
+
+        const platforms = [
+            { x: 0, y: 550, width: 250, height: 20 },
+            { x: 150, y: 450, width: 200, height: 20 },
+            { x: 350, y: 350, width: 150, height: 20 },
+            { x: 250, y: 250, width: 200, height: 20 },
+            { x: 500, y: 500, width: 200, height: 20 },
+            { x: 550, y: 200, width: 200, height: 20 },
+            { x: 300, y: 150, width: 150, height: 20 }
+        ];
+
+        const clouds = [
+            { x: 100, y: 50, width: 80, height: 40, speed: 0.3 },
+            { x: 300, y: 80, width: 100, height: 50, speed: 0.2 },
+            { x: 600, y: 40, width: 90, height: 45, speed: 0.25 },
+            { x: 450, y: 100, width: 70, height: 35, speed: 0.35 }
+        ];
+
+        const stars = [];
+        for (let i = 0; i < 20; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * 200,
+                size: Math.random() * 2 + 1,
+                twinkle: Math.random()
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            
+            if ((e.key === 'ArrowUp' || e.key === ' ') && !player.jumping && gameActive) {
+                player.velocityY = -12;
+                player.jumping = true;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        function updateObstacles() {
+            obstacles.forEach(obstacle => {
+                if (obstacle.moving) {
+                    obstacle.x += obstacle.speed * obstacle.direction;
+                    if (obstacle.x >= obstacle.endX || obstacle.x <= obstacle.startX) {
+                        obstacle.direction *= -1;
+                    }
+                }
+            });
+        }
+
+        function checkObstacleCollision() {
+            for (let obstacle of obstacles) {
+                if (player.x < obstacle.x + obstacle.width &&
+                    player.x + player.width > obstacle.x &&
+                    player.y < obstacle.y + obstacle.height &&
+                    player.y + player.height > obstacle.y) {
+                    gameOver();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function gameOver() {
+            gameActive = false;
+            const checkpointInfo = document.getElementById('checkpointInfo');
+            if (currentSavePoint === 0) {
+                checkpointInfo.textContent = 'Restarting from the beginning...';
+            } else {
+                checkpointInfo.textContent = `Restarting from Checkpoint ${currentSavePoint} 💖`;
+            }
+            document.getElementById('gameOver').style.display = 'block';
+        }
+
+        function restartGame() {
+            player.x = savePoints[currentSavePoint].x;
+            player.y = savePoints[currentSavePoint].y;
+            player.velocityY = 0;
+            player.jumping = false;
+            document.getElementById('gameOver').style.display = 'none';
+            gameActive = true;
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.style.display = 'block';
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 2000);
+        }
+
+        function updatePlayer() {
+            if (!gameActive) return;
+
+            if (keys['ArrowLeft']) {
+                player.x -= player.speed;
+            }
+            if (keys['ArrowRight']) {
+                player.x += player.speed;
+            }
+
+            player.velocityY += 0.5;
+            player.y += player.velocityY;
+
+            let onPlatform = false;
+            platforms.forEach(platform => {
+                if (player.x < platform.x + platform.width &&
+                    player.x + player.width > platform.x &&
+                    player.y + player.height > platform.y &&
+                    player.y + player.height < platform.y + 20 &&
+                    player.velocityY >= 0) {
+                    player.y = platform.y - player.height;
+                    player.velocityY = 0;
+                    player.jumping = false;
+                    onPlatform = true;
+                }
+            });
+
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+            if (player.y > canvas.height) {
+                gameOver();
+            }
+        }
+
+        function updateClouds() {
+            clouds.forEach(cloud => {
+                cloud.x += cloud.speed;
+                if (cloud.x > canvas.width) {
+                    cloud.x = -cloud.width;
+                }
+            });
+        }
+
+        function checkCollisions() {
+            checkpoints.forEach((checkpoint, index) => {
+                if (!checkpoint.collected &&
+                    player.x < checkpoint.x + checkpoint.width &&
+                    player.x + player.width > checkpoint.x &&
+                    player.y < checkpoint.y + checkpoint.height &&
+                    player.y + player.height > checkpoint.y) {
+                    
+                    checkpoint.collected = true;
+                    checkpointCount++;
+                    currentSavePoint = checkpointCount;
+                    document.getElementById('checkpointCount').textContent = checkpointCount;
+                    showSaveIndicator();
+                    
+                    if (checkpointCount === 5) {
+                        showFinalMessage();
+                    } else {
+                        showMemory(checkpoint.memory);
+                    }
+                }
+            });
+        }
+
+        function showMemory(memoryIndex) {
+            gameActive = false;
+            const popup = document.getElementById('memoryPopup');
+            const img = document.getElementById('memoryImage');
+            
+            img.src = memoryImages[memoryIndex];
+            
+            if (memoryIndex === 4) {
+                document.getElementById('memoryTitle').textContent = '✨ Our Best Memory! ✨';
+            } else {
+                document.getElementById('memoryTitle').textContent = `Memory ${memoryIndex + 1} Unlocked! 💕`;
+            }
+            
+            popup.style.display = 'flex';
+        }
+
+        function closeMemory() {
+            document.getElementById('memoryPopup').style.display = 'none';
+            gameActive = true;
+            if (checkpointCount === 5) {
+                setTimeout(showFinalMessage, 500);
+            }
+        }
+
+        function showFinalMessage() {
+            gameActive = false;
+            setTimeout(() => {
+                document.getElementById('finalImage').src = finalKissImage;
+                document.getElementById('finalMessage').style.display = 'flex';
+                createHearts();
+                startFireworks();
+            }, 1000);
+        }
+
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = '❤️';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(heart);
+                    setTimeout(() => heart.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
+        let particles = [];
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 8,
+                    y: (Math.random() - 0.5) * 8
+                };
+                this.alpha = 1;
+                this.radius = Math.random() * 3 + 2;
+            }
+
+            update() {
+                this.velocity.y += 0.1;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.01;
+            }
+
+            draw() {
+                fwCtx.save();
+                fwCtx.globalAlpha = this.alpha;
+                fwCtx.fillStyle = this.color;
+                fwCtx.beginPath();
+                fwCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                fwCtx.fill();
+                fwCtx.restore();
+            }
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#ff0844', '#ffb199', '#ffd23f', '#00f5ff', '#ff006e', '#8338ec', '#ff69b4'];
+            const particleCount = 60;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
+            }
+        }
+
+        function animateFireworks() {
+            fwCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            fwCtx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                } else {
+                    p.update();
+                    p.draw();
+                }
+            }
+
+            requestAnimationFrame(animateFireworks);
+        }
+
+        function startFireworks() {
+            fireworksCanvas.style.display = 'block';
+            animateFireworks();
+            
+            setInterval(() => {
+                const x = Math.random() * fireworksCanvas.width;
+                const y = Math.random() * fireworksCanvas.height * 0.6;
+                createFirework(x, y);
+            }, 400);
+
+            setInterval(() => {
+                createFloatingHeart();
+            }, 500);
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.textContent = Math.random() > 0.5 ? '💖' : '💝';
+            heart.style.position = 'fixed';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+            heart.style.zIndex = '260';
+            heart.style.animation = `floatUp ${Math.random() * 3 + 2}s ease-out forwards`;
+            heart.style.pointerEvents = 'none';
+            heart.style.textShadow = '0 0 20px #ff69b4, 0 0 40px #ff1493';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        function drawCloud(x, y, width, height) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.beginPath();
+            ctx.arc(x, y, height/2, 0, Math.PI * 2);
+            ctx.arc(x + width/3, y - height/4, height/2.5, 0, Math.PI * 2);
+            ctx.arc(x + 2*width/3, y, height/2.2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function draw() {
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(0.5, '#E0F6FF');
+            gradient.addColorStop(1, '#B4E7FF');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            stars.forEach(star => {
+                star.twinkle += 0.05;
+                const alpha = (Math.sin(star.twinkle) + 1) / 2;
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            clouds.forEach(cloud => {
+                drawCloud(cloud.x, cloud.y, cloud.width, cloud.height);
+            });
+
+            platforms.forEach(platform => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.fillRect(platform.x + 3, platform.y + 3, platform.width, platform.height);
+                
+                const platformGradient = ctx.createLinearGradient(0, platform.y, 0, platform.y + platform.height);
+                platformGradient.addColorStop(0, '#8B4513');
+                platformGradient.addColorStop(1, '#654321');
+                ctx.fillStyle = platformGradient;
+                ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+                
+                ctx.strokeStyle = '#4a2511';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
+                
+                ctx.strokeStyle = '#9d5f24';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < platform.width; i += 20) {
+                    ctx.beginPath();
+                    ctx.moveTo(platform.x + i, platform.y);
+                    ctx.lineTo(platform.x + i, platform.y + platform.height);
+                    ctx.stroke();
+                }
+            });
+
+            obstacles.forEach(obstacle => {
+                if (obstacle.type === 'spike') {
+                    ctx.fillStyle = '#ff4444';
+                    ctx.beginPath();
+                    ctx.moveTo(obstacle.x, obstacle.y + obstacle.height);
+                    ctx.lineTo(obstacle.x + obstacle.width/2, obstacle.y);
+                    ctx.lineTo(obstacle.x + obstacle.width, obstacle.y + obstacle.height);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.strokeStyle = '#cc0000';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                } else if (obstacle.type === 'moving') {
+                    ctx.fillStyle = '#ff6600';
+                    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                    ctx.strokeStyle = '#cc5200';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 20px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('⚠️', obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2 + 7);
+                }
+            });
+
+            checkpoints.forEach((checkpoint, index) => {
+                if (checkpoint.collected) {
+                    ctx.fillStyle = 'rgba(76, 175, 80, 0.6)';
+                    ctx.fillRect(checkpoint.x - 5, checkpoint.y - 50, 40, 50);
+                    ctx.fillStyle = '#4CAF50';
+                    ctx.font = 'bold 25px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('✓', checkpoint.x + 15, checkpoint.y - 20);
+                }
+            });
+
+            checkpoints.forEach(checkpoint => {
+                if (!checkpoint.collected) {
+                    const pulse = Math.sin(Date.now() / 200) * 10;
+                    ctx.shadowBlur = 20 + pulse;
+                    ctx.shadowColor = '#ff69b4';
+                    const scale = 1 + Math.sin(Date.now() / 200) * 0.2;
+                    ctx.font = (30 * scale) + 'px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('❤️', checkpoint.x + checkpoint.width/2, checkpoint.y + checkpoint.height);
+                    ctx.shadowBlur = 0;
+                }
+            });
+
+            if (player.imageLoaded) {
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(255, 105, 180, 0.5)';
+                ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
+                ctx.shadowBlur = 0;
+            } else {
+                ctx.fillStyle = '#ff69b4';
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+                ctx.font = '30px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText('🎮', player.x, player.y + 30);
+            }
+        }
+
+        function gameLoop() {
+            updatePlayer();
+            updateObstacles();
+            updateClouds();
+            checkCollisions();
+            checkObstacleCollision();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
