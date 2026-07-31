@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>newgame! 💕</title>
+    <title>Happy Girlfriend's Day! 💕</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Arial', sans-serif;
@@ -52,20 +48,12 @@
             font-size: 14px;
             margin-top: 10px;
             display: none;
-            animation: slideDown 0.5s ease-out forwards;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
 
         .memory-popup {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0,0,0,0.9);
             display: none;
             justify-content: center;
@@ -73,42 +61,29 @@
             z-index: 100;
         }
 
-        .memory-content {
-            text-align: center;
-        }
-
+        .memory-content { text-align: center; }
         .memory-content img {
-            max-width: 80%;
-            max-height: 70vh;
+            max-width: 80%; max-height: 70vh;
             border-radius: 15px;
             border: 5px solid #fff;
             box-shadow: 0 0 30px rgba(255,255,255,0.5);
         }
-
         .memory-content h2 {
-            color: #ff69b4;
-            margin: 20px 0;
-            font-size: 28px;
+            color: #ff69b4; margin: 20px 0; font-size: 28px;
         }
 
         .continue-btn {
             background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 20px;
+            color: white; border: none;
+            padding: 15px 40px; font-size: 18px;
+            border-radius: 30px; cursor: pointer; margin-top: 20px;
         }
 
-        /* FINAL MESSAGE - SIMPLE AND ALWAYS VISIBLE */
+        /* FINAL MESSAGE - SIMPLE, ALWAYS VISIBLE */
         .final-message {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: linear-gradient(135deg, #ff69b4 0%, #ff1493 50%, #8a2be2 100%);
             display: none;
             justify-content: center;
@@ -132,22 +107,17 @@
         }
 
         .final-content h1 {
-            font-size: 60px;
-            margin-bottom: 20px;
+            font-size: 60px; margin-bottom: 20px;
             text-shadow: 3px 3px 10px rgba(0,0,0,0.5);
-            color: #fff;
-            letter-spacing: 2px;
+            color: #fff; letter-spacing: 2px;
         }
 
         .final-content h2 {
-            font-size: 30px;
-            margin: 15px 0;
-            color: #fff0f5;
+            font-size: 30px; margin: 15px 0; color: #fff0f5;
         }
 
         .final-content img {
-            max-width: 80%;
-            max-height: 45vh;
+            max-width: 80%; max-height: 45vh;
             border-radius: 20px;
             border: 6px solid white;
             margin: 20px 0;
@@ -156,19 +126,17 @@
 
         .hearts {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 600;
+            overflow: hidden;
         }
 
         .heart {
             position: absolute;
             font-size: 30px;
             animation: float 4s ease-in infinite;
-            color: #fff;
         }
 
         @keyframes float {
@@ -180,8 +148,7 @@
 
         .instructions {
             position: absolute;
-            bottom: 20px;
-            left: 50%;
+            bottom: 20px; left: 50%;
             transform: translateX(-50%);
             color: white;
             background: rgba(0,0,0,0.5);
@@ -191,21 +158,9 @@
             z-index: 5;
         }
 
-        .fireworks-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 550;
-            display: none;
-        }
-
         .game-over-text {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             color: white;
             font-size: 28px;
@@ -218,20 +173,13 @@
         }
 
         .restart-btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 15px;
+            background: #4CAF50; color: white; border: none;
+            padding: 12px 30px; font-size: 16px;
+            border-radius: 20px; cursor: pointer; margin-top: 15px;
         }
 
         .checkpoint-info {
-            font-size: 16px;
-            margin-top: 10px;
-            color: #ffeb3b;
+            font-size: 16px; margin-top: 10px; color: #ffeb3b;
         }
     </style>
 </head>
@@ -242,7 +190,7 @@
         <div class="save-indicator" id="saveIndicator">✓ Progress Saved!</div>
     </div>
 
-    <div class="instructions">Arrow Keys ← → to move | ↑ Space to jump | Avoid ⚠️ | Collect ❤️</div>
+    <div class="instructions">Arrow Keys ← → to move | ↑ or Space to jump | Avoid ⚠️ | Collect ❤️</div>
 
     <div class="game-over-text" id="gameOver">
         💔 Oops! Hit an Obstacle 💔
@@ -251,7 +199,6 @@
     </div>
 
     <canvas id="gameCanvas"></canvas>
-    <canvas id="fireworksCanvas" class="fireworks-canvas"></canvas>
 
     <div class="memory-popup" id="memoryPopup">
         <div class="memory-content">
@@ -261,7 +208,6 @@
         </div>
     </div>
 
-    <!-- SIMPLE FINAL SCREEN -->
     <div class="final-message" id="finalMessage">
         <div class="final-content">
             <h1>Happy Girlfriend's Day!</h1>
@@ -276,13 +222,9 @@
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const fireworksCanvas = document.getElementById('fireworksCanvas');
-        const fwCtx = fireworksCanvas.getContext('2d');
         
         canvas.width = 800;
         canvas.height = 600;
-        fireworksCanvas.width = window.innerWidth;
-        fireworksCanvas.height = window.innerHeight;
 
         let player = {
             x: 50, y: 500, width: 40, height: 40,
@@ -297,15 +239,18 @@
 
         let currentSavePoint = 0;
 
+        // REPLACE WITH YOUR PHOTO
         player.image.src = 'myphoto.png';
         player.image.onload = () => player.imageLoaded = true;
 
+        // REPLACE WITH 5 MEMORY PHOTOS
         const memoryImages = [
-            'photo1.png', 'photo2.jpg', 'photo3.jpg',
-            'herphoto4.jpg', 'finalImage.png'
+            'photo1.png', 'photo.jpg', 'photo3.jpg',
+            'photo4.jpg', 'photo6.jpg'
         ];
 
-        const finalKissImage = 'photo6.jpg';
+        // REPLACE WITH YOUR FINAL PHOTO
+        const finalKissImage = 'finalImage.png';
 
         let checkpoints = [
             {x:200, y:370, w:30, h:30, collected:false, memory:0},
@@ -427,7 +372,7 @@
         }
 
         function checkCollisions(){
-            checkpoints.forEach((cp, i) => {
+            checkpoints.forEach((cp) => {
                 if(!cp.collected && 
                    player.x < cp.x+cp.w && player.x+player.width > cp.x &&
                    player.y < cp.y+cp.h && player.y+player.height > cp.y){
@@ -462,17 +407,14 @@
         function showFinalMessage(){
             gameActive = false;
             document.getElementById('finalImage').src = finalKissImage;
-            
-            // SIMPLE: just add class and keep visible
             document.getElementById('finalMessage').classList.add('show');
             
             createHearts();
-            startFireworks();
         }
 
         function createHearts(){
             const container = document.getElementById('heartsContainer');
-            for(let i=0; i<40; i++){
+            for(let i=0; i<30; i++){
                 setTimeout(() => {
                     const h = document.createElement('div');
                     h.className = 'heart';
@@ -481,58 +423,8 @@
                     h.style.animationDuration = (Math.random()*3+3) + 's';
                     container.appendChild(h);
                     setTimeout(() => h.remove(), 6000);
-                }, i*100);
+                }, i*150);
             }
-        }
-
-        let particles = [];
-        class Particle {
-            constructor(x,y,color){
-                this.x=x; this.y=y; this.color=color;
-                this.vx = (Math.random()-0.5)*8;
-                this.vy = (Math.random()-0.5)*8;
-                this.alpha=1;
-                this.r = Math.random()*3+2;
-            }
-            update(){
-                this.vy += 0.08;
-                this.x += this.vx;
-                this.y += this.vy;
-                this.alpha -= 0.015;
-            }
-            draw(){
-                fwCtx.save();
-                fwCtx.globalAlpha = Math.max(0, this.alpha);
-                fwCtx.fillStyle = this.color;
-                fwCtx.beginPath();
-                fwCtx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-                fwCtx.fill();
-                fwCtx.restore();
-            }
-        }
-
-        function createFirework(x,y){
-            const colors = ['#ff0844','#ffb199','#ffd23f','#00f5ff','#ff006e','#8338ec','#ff69b4','#fff'];
-            for(let i=0; i<50; i++) particles.push(new Particle(x,y,colors[Math.floor(Math.random()*colors.length)]));
-        }
-
-        function animateFireworks(){
-            fwCtx.fillStyle = 'rgba(0,0,0,0.15)';
-            fwCtx.fillRect(0,0,fireworksCanvas.width,fireworksCanvas.height);
-            for(let i=particles.length-1;i>=0;i--){
-                let p = particles[i];
-                if(p.alpha <= 0.01) particles.splice(i,1);
-                else { p.update(); p.draw(); }
-            }
-            requestAnimationFrame(animateFireworks);
-        }
-
-        function startFireworks(){
-            fireworksCanvas.style.display = 'block';
-            animateFireworks();
-            setInterval(() => {
-                createFirework(Math.random()*fireworksCanvas.width, Math.random()*fireworksCanvas.height*0.6);
-            }, 350);
         }
 
         function drawCloud(x,y,w,h){
@@ -573,8 +465,7 @@
                 g.addColorStop(0,'#8B4513'); g.addColorStop(1,'#654321');
                 ctx.fillStyle = g;
                 ctx.fillRect(p.x, p.y, p.w, p.h);
-                ctx.strokeStyle = '#4a2511';
-                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#4a2511'; ctx.lineWidth = 2;
                 ctx.strokeRect(p.x, p.y, p.w, p.h);
             });
 
@@ -591,7 +482,8 @@
                 } else {
                     ctx.fillStyle = '#ff6600';
                     ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
-                    ctx.strokeStyle = '#cc5200'; ctx.lineWidth=2; ctx.strokeRect(ob.x,ob.y,ob.w,ob.h);
+                    ctx.strokeStyle = '#cc5200'; ctx.lineWidth=2;
+                    ctx.strokeRect(ob.x,ob.y,ob.w,ob.h);
                     ctx.fillStyle = '#fff'; ctx.font = 'bold 18px Arial'; ctx.textAlign='center';
                     ctx.fillText('⚠️', ob.x+ob.w/2, ob.y+ob.h/2+6);
                 }
