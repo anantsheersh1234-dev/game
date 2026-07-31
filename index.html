@@ -79,7 +79,6 @@
             border-radius: 30px; cursor: pointer; margin-top: 20px;
         }
 
-        /* FINAL MESSAGE - SIMPLE, ALWAYS VISIBLE */
         .final-message {
             position: fixed;
             top: 0; left: 0;
@@ -190,7 +189,7 @@
         <div class="save-indicator" id="saveIndicator">✓ Progress Saved!</div>
     </div>
 
-    <div class="instructions">Arrow Keys ← → to move | ↑ or Space to jump | Avoid ⚠️ | Collect ❤️</div>
+    <div class="instructions">W A S D to move | W to jump | Avoid ⚠️ | Collect ❤️</div>
 
     <div class="game-over-text" id="gameOver">
         💔 Oops! Hit an Obstacle 💔
@@ -210,8 +209,8 @@
 
     <div class="final-message" id="finalMessage">
         <div class="final-content">
-            <h1>Happy Girlfriend's Day meli babyy!</h1>
-            <h2>i just always want to see you happy i may frustrate you at times but that doesnt mean i dont love i love you the most my babyy ❤️</h2>
+            <h1>Happy Girlfriend's Day!</h1>
+            <h2>i just always want to see you happy i may frustrate you at times but that doesnt mean i dont love i love you the most my babyy❤️</h2>
             <img id="finalImage" src="" alt="Together">
             <h2>I Love You Forever 💕</h2>
         </div>
@@ -239,17 +238,14 @@
 
         let currentSavePoint = 0;
 
-        // REPLACE WITH YOUR PHOTO
         player.image.src = 'myphoto.png';
         player.image.onload = () => player.imageLoaded = true;
 
-        // REPLACE WITH 5 MEMORY PHOTOS
         const memoryImages = [
             'photo1.png', 'photo2.jpg', 'photo3.jpg',
             'herphoto4.jpg', 'photo6.jpg'
         ];
 
-        // REPLACE WITH YOUR FINAL PHOTO
         const finalKissImage = 'finalImage.png';
 
         let checkpoints = [
@@ -291,13 +287,13 @@
         }
 
         document.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-            if((e.key==='ArrowUp' || e.key===' ') && !player.jumping && gameActive){
+            keys[e.key.toLowerCase()] = true;
+            if((e.key.toLowerCase()==='w') && !player.jumping && gameActive){
                 player.velocityY = -12;
                 player.jumping = true;
             }
         });
-        document.addEventListener('keyup', (e) => keys[e.key] = false);
+        document.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
 
         function updateObstacles(){
             obstacles.forEach(ob => {
@@ -343,8 +339,9 @@
 
         function updatePlayer(){
             if(!gameActive) return;
-            if(keys['ArrowLeft']) player.x -= player.speed;
-            if(keys['ArrowRight']) player.x += player.speed;
+            
+            if(keys['a']) player.x -= player.speed;
+            if(keys['d']) player.x += player.speed;
 
             player.velocityY += 0.5;
             player.y += player.velocityY;
@@ -408,7 +405,6 @@
             gameActive = false;
             document.getElementById('finalImage').src = finalKissImage;
             document.getElementById('finalMessage').classList.add('show');
-            
             createHearts();
         }
 
